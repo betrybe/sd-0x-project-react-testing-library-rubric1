@@ -38,7 +38,7 @@ jobs:
         uses: betrybe/stryker-evaluator-action@v1.2
         with:
           repository-test-name: 'betrybe/sd-0x-project-react-testing-library-tests'
-          repository-test-branch: 'master'
+          repository-test-branch: 'Dia-05-03-alterando-data-testid'
       - name: Store evaluation step
         uses: betrybe/store-evaluation-action@v2
         with:
