@@ -1,24 +1,20 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
 import renderWithRouter from '../renderWithRouter';
 import NotFound from '../components/NotFound';
 
-describe('Testing "NotFound.js" file:', () => {
-  it(`Should contain a h2 heading with the text
-  "Page requested not found 😭"`, () => {
-    const { history } = renderWithRouter(<NotFound />);
-    history.push('/not/found');
-    const h2 = screen.getByRole('heading', { level: 2 });
-    expect(h2).toBeInTheDocument();
-    expect(h2.textContent).toContain('Page requested not found');
+describe('Testa NotFound.js  - requirement4', () => {
+  it('Teste se página contém um h2 com o texto Page requested not found 😭', () => {
+    const { getByRole } = renderWithRouter(<NotFound />);
+    const heading = getByRole('heading');
+    expect(heading).toBeInTheDocument();
+    expect(heading).toHaveTextContent('Page requested not found 😭');
+    expect(heading.tagName).toBe('H2');
   });
 
-  it('Should exhibit a specific image', () => {
-    const source = 'https://media.giphy.com/media/kNSeTs31XBZ3G/giphy.gif';
-    renderWithRouter(<NotFound />);
-    const alt = 'Pikachu crying because the page requested was not found';
-    const img = screen.getByAltText(alt);
-    expect(img).toBeInTheDocument();
-    expect(img.src).toBe(source);
+  it('Teste se página mostra a imagem:', () => {
+    const { getAllByRole } = renderWithRouter(<NotFound />);
+    const images = getAllByRole('img');
+    const matchImage = images.some((image) => image.src === 'https://media.giphy.com/media/kNSeTs31XBZ3G/giphy.gif');
+    expect(matchImage).toBe(true);
   });
 });

@@ -1,41 +1,36 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
 import renderWithRouter from '../renderWithRouter';
 import About from '../components/About';
 
-describe('Testing "About.js" file:', () => {
-  it('Should contain Pokédex info', () => {
-    renderWithRouter(<About />);
-    const info = screen.getByText('About Pokédex');
-    expect(info).toBeInTheDocument();
+describe('Testing About.js - requirement2', () => {
+  it('Teste se a página contém as informações sobre a Pokédex', () => {
+    const { getByText } = renderWithRouter(<About />);
+    const about = getByText('About Pokédex');
+    expect(about).toBeInTheDocument();
   });
 
-  it('Should contain heading h2 with text "About Pokédex"', () => {
-    renderWithRouter(<About />);
-    const h2 = screen.getByRole('heading', { level: 2 });
-    expect(h2).toBeInTheDocument();
-    expect(h2.textContent).toContain('About Pokédex');
+  it('Teste se a página contém um heading h2 com o texto About Pokédex', () => {
+    const { getByRole } = renderWithRouter(<About />);
+    const heading = getByRole('heading');
+    expect(heading).toBeInTheDocument();
+    expect(heading).toHaveTextContent('About Pokédex');
+    expect(heading.tagName).toBe('H2');
   });
 
-  it('Should contain two paragraphs, each one with a specific text about the Pokédex',
-    () => {
-      renderWithRouter(<About />);
-      const text1 = /This application simulates a Pokédex,/i;
-      const p1 = screen.getByText(text1);
-      expect(p1).toBeInTheDocument();
-      expect(p1.tagName.toLowerCase()).toBe('p');
+  it('Teste se a página contém dois parágrafos com texto sobre a Pokédex', () => {
+    const { getByText } = renderWithRouter(<About />);
+    const p1 = getByText(/This application simulates a Pokédex/i);
+    const p2 = getByText(/One can filter/i);
+    expect(p1).toBeInTheDocument();
+    expect(p2).toBeInTheDocument();
+    expect(p1.tagName).toBe('P');
+    expect(p2.tagName).toBe('P');
+  });
 
-      const text2 = /One can filter Pokémons by type, and see more details for each one/i;
-      const p2 = screen.getByText(text2);
-      expect(p2).toBeInTheDocument();
-      expect(p2.tagName.toLowerCase()).toBe('p');
-    });
-
-  it('Should contain a specific image of a Pokédex', () => {
-    const source = 'https://cdn.bulbagarden.net/upload/thumb/8/86/Gen_I_Pok%C3%A9dex.png/800px-Gen_I_Pok%C3%A9dex.png';
-    renderWithRouter(<About />);
-    const img = screen.getByRole('img', { className: 'pokedex-image' });
+  it('Teste se a página contém a seguinte imagem de uma Pokédex:', () => {
+    const { getByRole } = renderWithRouter(<About />);
+    const img = getByRole('img');
     expect(img).toBeInTheDocument();
-    expect(img.src).toBe(source);
+    expect(img.src).toBe('https://cdn.bulbagarden.net/upload/thumb/8/86/Gen_I_Pok%C3%A9dex.png/800px-Gen_I_Pok%C3%A9dex.png');
   });
 });

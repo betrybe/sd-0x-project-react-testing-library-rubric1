@@ -1,34 +1,29 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { fireEvent } from '@testing-library/react';
 import renderWithRouter from '../renderWithRouter';
 import FavoritePokemons from '../components/FavoritePokemons';
-import pokemons from '../data';
+import App from '../App';
 
-describe('Testing "FavoritePokemons.js" file:', () => {
-  it(`Should exhibit the following text: "No favorite pokemon found",
-  if no favorite pokemon is available`, () => {
-    renderWithRouter(<FavoritePokemons />);
-    const text = screen.getByText('No favorite pokemon found');
-    expect(text).toBeInTheDocument();
+describe('Testa FavoritePokemons.js - requirement3', () => {
+  it('É exibido a msg No favorite pokemon found se n tiver pokémons favoritos', () => {
+    const { getByText } = renderWithRouter(<FavoritePokemons pokemons={ [] } />);
+    const notFoundFavorite = getByText(/No favorite pokemon found/i);
+    expect(notFoundFavorite).toBeInTheDocument();
   });
 
-  it('Should exhibit all cards of the favorite pokemons', () => {
-    const id1 = 25;
-    const id2 = 4;
-    const pokemon1 = pokemons.find((pokemon) => pokemon.id === id1);
-    const pokemon2 = pokemons.find((pokemon) => pokemon.id === id2);
-    const favoritePokemons = [pokemon1, pokemon2];
-    // Linha a seguir adaptada a partir da solução feita por Dan:
-    renderWithRouter(<FavoritePokemons pokemons={ favoritePokemons } />);
-    const pikachu = screen.queryByText('Pikachu');
-    expect(pikachu).toBeInTheDocument();
-    const charmander = screen.queryByText('Charmander');
-    expect(charmander).toBeInTheDocument();
+  it('Teste se é exibido todos os cards de pokémons favoritados', () => {
+    const { getByText, getByRole } = renderWithRouter(<App />);
+    const moreDetailsLink = getByText(/More Details/i);
+    fireEvent.click(moreDetailsLink);
+    fireEvent.click(getByRole('checkbox'));
+    fireEvent.click(getByText(/Favorite Pokémons/i));
+    const thereIsPokemon = getByText(/Average weight/i);
+    expect(thereIsPokemon).toBeInTheDocument();
   });
 
-  it('Should exhibit no pokemon card if no pokemon is marked as favorite', () => {
-    renderWithRouter(<FavoritePokemons />);
-    const mew = screen.queryByText('Mew');
-    expect(mew).not.toBeInTheDocument();
+  it('Nenhum card de pokémon é exibido, se ele não estiver favoritado.', () => {
+    const { queryByText } = renderWithRouter(<FavoritePokemons />);
+    const thereIsPokemon = queryByText(/Average weight/i);
+    expect(thereIsPokemon).not.toBeInTheDocument();
   });
 });
